@@ -1,11 +1,12 @@
+import { pi } from "../helpers";
 import Speed from "./Speed";
 
 export default class Movable {
   constructor() {
-    this.speed = new Speed(4);
+    this.speed = new Speed(10);
     this.x = 0;
     this.y = 0;
-    this.r = 0;
+    this.size = 0;
     this.rotation = 0;
   }
 
@@ -23,18 +24,25 @@ export default class Movable {
   }
 
   ArrowLeftPressed() {
-    this.rotation = Math.PI;
+    this.rotation = pi();
     this.speed.left();
   }
 
   ArrowUpPressed() {
-    this.rotation = -Math.PI / 2;
+    this.rotation = -pi(0.5);
     this.speed.up();
   }
 
   ArrowDownPressed() {
-    this.rotation = Math.PI / 2;
+    this.rotation = pi(0.5);
     this.speed.down();
+  }
+
+  draw() {}
+
+  update() {
+    this.tick();
+    this.draw();
   }
 
   tick() {
@@ -45,20 +53,24 @@ export default class Movable {
   }
 
   bringBack() {
-    if (this.x > innerWidth + this.r) {
-      this.x = -this.r;
+    if (!this.width || !this.height) {
+      this.width = this.height = this.size;
     }
 
-    if (this.x < -this.r) {
-      this.x = innerWidth + this.r;
+    if (this.x > innerWidth + this.width) {
+      this.x = -this.width;
     }
 
-    if (this.y < -this.r) {
-      this.y = innerHeight + this.r;
+    if (this.x < -this.width) {
+      this.x = innerWidth + this.width;
     }
 
-    if (this.y > innerHeight + this.r) {
-      this.y = -this.r;
+    if (this.y < -this.height) {
+      this.y = innerHeight + this.height;
+    }
+
+    if (this.y > innerHeight + this.height) {
+      this.y = -this.height;
     }
   }
 }

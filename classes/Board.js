@@ -1,5 +1,6 @@
 import Pacman from "./Pacman";
 import Ghost from "./Ghost";
+import { isolate } from "../helpers";
 
 export default class Board {
   constructor() {
@@ -12,7 +13,7 @@ export default class Board {
     this.pacman = new Pacman(this);
     this.ghosts = Array(4)
       .fill()
-      .map(() => new Ghost());
+      .map(() => new Ghost(this));
   }
 
   element() {
@@ -24,7 +25,10 @@ export default class Board {
   }
 
   clean() {
-    this.context.clearRect(0, 0, innerWidth, innerHeight);
+    isolate(this.context, (c) => {
+      this.fillStyle = "rgba(21,21,21,0.1)";
+      this.context.fillRect(0, 0, innerWidth, innerHeight);
+    });
   }
 
   sinCounter(coeff = 1, scoeff) {
@@ -34,10 +38,12 @@ export default class Board {
   loop() {
     requestAnimationFrame(() => {
       this.counter++;
+
       this.loop();
       this.clean();
-      this.pacman.tick();
-      this.pacman.draw();
+
+      this.ghosts.forEach((ghost) => ghost.update());
+      this.pacman.update();
     });
   }
 }
