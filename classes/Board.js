@@ -1,6 +1,9 @@
 import Pacman from "./Pacman";
 import Ghost from "./Ghost";
-import { isolate } from "../helpers";
+import RedGhost from "./RedGhost";
+import PinkGhost from "./PinkGhost";
+import BlueGhost from "./BlueGhost";
+import { isolate, rand } from "../helpers";
 
 export default class Board {
   constructor() {
@@ -11,9 +14,12 @@ export default class Board {
     this.element.height = innerHeight;
 
     this.pacman = new Pacman(this);
-    this.ghosts = Array(4)
-      .fill()
-      .map(() => new Ghost(this));
+    this.ghosts = [
+      new Ghost(this, rand(0, innerWidth), rand(0, innerHeight)),
+      new BlueGhost(this, rand(0, innerWidth), rand(0, innerHeight)),
+      new RedGhost(this, rand(0, innerWidth), rand(0, innerHeight)),
+      new PinkGhost(this, rand(0, innerWidth), rand(0, innerHeight)),
+    ].sort(() => 0.5 - Math.random());
   }
 
   element() {

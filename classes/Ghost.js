@@ -2,14 +2,17 @@ import { isolate, pi, triangle } from "../helpers";
 import Movable from "./Movable";
 
 export default class Ghost extends Movable {
-  constructor(board) {
+  constructor(board, x, y) {
     super();
+
     this.board = board;
     this.context = this.board.context;
-    this.x = 200;
-    this.y = 100;
+    this.x = x;
+    this.y = y;
     this.width = 3 * 25;
     this.height = this.width * 1.2;
+
+    this.color = "#fab234";
   }
 
   draw() {
@@ -17,7 +20,7 @@ export default class Ghost extends Movable {
       c.translate(this.x, this.y);
 
       // head
-      c.fillStyle = "red";
+      c.fillStyle = this.color;
       c.arc(-this.width / 2, 0, this.width / 2, 0, pi(), true);
       c.fill();
 
@@ -42,6 +45,13 @@ export default class Ghost extends Movable {
       c.fillStyle = "white";
       c.arc(-this.width / 4, 0, this.width / 8, 0, pi(2));
       c.arc(-this.width + this.width / 4, 0, this.width / 8, 0, pi(2));
+      c.fill();
+      c.closePath();
+
+      c.beginPath();
+      c.fillStyle = "black";
+      c.arc(-this.width / 4, 0, this.width / 16, 0, pi(2));
+      c.arc(-this.width + this.width / 4, 0, this.width / 16, 0, pi(2));
       c.fill();
       c.closePath();
     });

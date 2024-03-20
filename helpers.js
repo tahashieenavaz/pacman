@@ -17,3 +17,7 @@ export function triangle(context, x, y, size) {
   path.lineTo(x - size / 2, y + size / 2);
   context.fill(path);
 }
+
+export function rand(low, high) {
+  return ~~(Math.random() * (high - low)) + low;
+}
