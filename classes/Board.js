@@ -40,12 +40,17 @@ export default class Board {
     return coeff * Math.sin(this.counter / scoeff);
   }
 
+  isColliding() {
+    return this.ghosts.some((ghost) => this.pacman.isCollidingWithGhost(ghost));
+  }
+
   loop() {
     requestAnimationFrame(() => {
       this.counter++;
 
       this.loop();
       this.clean();
+      this.isColliding();
 
       this.ghosts.forEach((ghost) => ghost.update());
       this.pacman.update();

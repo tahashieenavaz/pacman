@@ -1,5 +1,5 @@
 import Movable from "./Movable";
-import { isolate, pi } from "../helpers";
+import { isolate, pi, distance } from "../helpers";
 
 export default class Pacman extends Movable {
   constructor(board) {
@@ -13,6 +13,15 @@ export default class Pacman extends Movable {
     this.fraction = 10;
 
     this.event();
+  }
+
+  isCollidingWithGhost(ghost) {
+    if (distance(this.x, this.y, ghost.x, ghost.y) < this.r + ghost.average) {
+      console.log("Yes");
+      return true;
+    }
+
+    return false;
   }
 
   draw() {

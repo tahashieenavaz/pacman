@@ -13,6 +13,7 @@ export default class Ghost extends Movable {
     this.context = this.board.context;
     this.width = 3 * 25;
     this.height = this.width * 1.2;
+    this.average = (this.width + this.height) / 2;
     this.x = innerWidth / 2 - this.width * 2 + this.width * ghostCount;
     this.y = innerHeight / 2;
 
@@ -26,6 +27,7 @@ export default class Ghost extends Movable {
       this.speed.random();
     }
   }
+
   draw() {
     isolate(this.context, (c) => {
       c.translate(this.x, this.y);

@@ -3,7 +3,7 @@ import Speed from "./Speed";
 
 export default class Movable {
   constructor() {
-    this.speed = new Speed(10);
+    this.speed = new Speed(3);
     this.x = 0;
     this.y = 0;
     this.size = 0;
