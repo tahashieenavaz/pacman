@@ -1,0 +1,28 @@
+export default class Speed {
+  constructor(base = 1) {
+    this.x = 0;
+    this.y = 0;
+    this.base = base;
+  }
+
+  set(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  right() {
+    this.set(this.base, 0);
+  }
+
+  left() {
+    this.set(-this.base, 0);
+  }
+
+  up() {
+    this.set(0, -this.base);
+  }
+
+  down() {
+    this.set(0, this.base);
+  }
+}
