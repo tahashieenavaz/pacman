@@ -5,5 +5,5 @@ export default class Ghost extends Movable {
     super();
   }
 
-  
+  draw() {}
 }

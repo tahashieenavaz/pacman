@@ -1,4 +1,5 @@
 import Movable from "./Movable";
+import { isolate } from "../helpers";
 
 export default class Pacman extends Movable {
   constructor(board) {
@@ -16,15 +17,13 @@ export default class Pacman extends Movable {
 
   draw() {
     const angle = Math.PI / this.fraction + this.board.sinCounter(0.2, 8);
-    this.context.save();
-    this.context.translate(this.x, this.y);
-    this.context.rotate(this.rotation);
-    this.context.beginPath();
-    this.context.arc(0, 0, this.r, -angle, angle, true);
-    this.context.lineTo(0, 0);
-    this.context.fillStyle = "#ffeb3b";
-    this.context.closePath();
-    this.context.fill();
-    this.context.restore();
+    isolate(this.context, (c) => {
+      c.translate(this.x, this.y);
+      c.rotate(this.rotation);
+      c.arc(0, 0, this.r, -angle, angle, true);
+      c.lineTo(0, 0);
+      c.fillStyle = "#ffeb3b";
+      c.fill();
+    });
   }
 }
