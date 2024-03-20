@@ -7,8 +7,8 @@ export default class Pacman extends Movable {
 
     this.board = board;
     this.context = board.context;
-    this.x = innerWidth / 2;
-    this.y = innerHeight / 2;
+    this.x = 100;
+    this.y = 100;
     this.size = 35;
     this.fraction = 10;
 

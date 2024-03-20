@@ -3,10 +3,12 @@ import Ghost from "./Ghost";
 import RedGhost from "./RedGhost";
 import PinkGhost from "./PinkGhost";
 import BlueGhost from "./BlueGhost";
-import { isolate, rand } from "../helpers";
+import { primes, shuffle } from "../helpers";
 
 export default class Board {
   constructor() {
+    const primeNumbers = primes();
+
     this.counter = 0;
     this.element = document.createElement("canvas");
     this.context = this.element.getContext("2d");
@@ -14,12 +16,12 @@ export default class Board {
     this.element.height = innerHeight;
 
     this.pacman = new Pacman(this);
-    this.ghosts = [
-      new Ghost(this, rand(0, innerWidth), rand(0, innerHeight)),
-      new BlueGhost(this, rand(0, innerWidth), rand(0, innerHeight)),
-      new RedGhost(this, rand(0, innerWidth), rand(0, innerHeight)),
-      new PinkGhost(this, rand(0, innerWidth), rand(0, innerHeight)),
-    ].sort(() => 0.5 - Math.random());
+    this.ghosts = shuffle([
+      new Ghost(this, primeNumbers[0]),
+      new BlueGhost(this, primeNumbers[1]),
+      new RedGhost(this, primeNumbers[2]),
+      new PinkGhost(this, primeNumbers[3]),
+    ]);
   }
 
   element() {
@@ -31,10 +33,7 @@ export default class Board {
   }
 
   clean() {
-    isolate(this.context, (c) => {
-      this.fillStyle = "rgba(21,21,21,0.1)";
-      this.context.fillRect(0, 0, innerWidth, innerHeight);
-    });
+    this.context.clearRect(0, 0, innerWidth, innerHeight);
   }
 
   sinCounter(coeff = 1, scoeff) {

@@ -1,3 +1,5 @@
+import { oneOf } from "../helpers";
+
 export default class Speed {
   constructor(base = 1) {
     this.x = 0;
@@ -24,5 +26,10 @@ export default class Speed {
 
   down() {
     this.set(0, this.base);
+  }
+
+  random() {
+    const option = oneOf(["left", "up", "down", "right"]);
+    return this[option]();
   }
 }
