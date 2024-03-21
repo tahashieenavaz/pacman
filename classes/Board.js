@@ -50,10 +50,10 @@ export default class Board {
 
       this.loop();
       this.clean();
-      this.isColliding();
 
       this.ghosts.forEach((ghost) => ghost.update());
       this.pacman.update();
+      this.isColliding();
     });
   }
 }

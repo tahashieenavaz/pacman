@@ -16,11 +16,20 @@ export default class Pacman extends Movable {
   }
 
   isCollidingWithGhost(ghost) {
-    if (distance(this.x, this.y, ghost.x, ghost.y) < this.r + ghost.average) {
+    const d = distance(this.x, this.y, ghost.x, ghost.y);
+
+    isolate(this.context, (c) => {
+      c.fillStyle = "red";
+      c.arc(ghost.x - ghost.width / 2, ghost.y, 40, 0, pi(2));
+      c.fill();
+    });
+
+    console.log(d);
+
+    if (d < this.r + ghost.average) {
       console.log("Yes");
       return true;
     }
-
     return false;
   }
 

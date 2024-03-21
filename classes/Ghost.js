@@ -1,4 +1,4 @@
-import { isolate, pi, triangle } from "../helpers";
+import { oneOf, isolate, pi, primes, triangle } from "../helpers";
 import Movable from "./Movable";
 import Repository from "./Repository";
 
@@ -23,9 +23,10 @@ export default class Ghost extends Movable {
   update() {
     super.update();
 
-    if (this.board.counter % this.prime === 0) {
-      this.speed.random();
-    }
+    // if (this.board.counter % this.prime === 0) {
+    //   this.speed.random();
+    //   this.prime = oneOf(primes());
+    // }
   }
 
   draw() {
@@ -42,7 +43,7 @@ export default class Ghost extends Movable {
 
       c.fillStyle = "#151515";
 
-      // triangles
+      // triangles which move due to the sinCounter
       const tsize = this.width / 3;
       for (let i = 0; i < 3; i++) {
         triangle(
