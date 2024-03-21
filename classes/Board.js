@@ -1,8 +1,8 @@
 import Pacman from "./Pacman";
-import Ghost from "./Ghost";
-import RedGhost from "./RedGhost";
-import PinkGhost from "./PinkGhost";
-import BlueGhost from "./BlueGhost";
+import Ghost from "./Ghosts/Ghost";
+import RedGhost from "./Ghosts/RedGhost";
+import PinkGhost from "./Ghosts/PinkGhost";
+import BlueGhost from "./Ghosts/BlueGhost";
 import { primes, shuffle } from "../helpers";
 
 export default class Board {

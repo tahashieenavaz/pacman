@@ -1,6 +1,6 @@
-import { oneOf, isolate, pi, primes, triangle } from "../helpers";
-import Movable from "./Movable";
-import Repository from "./Repository";
+import { oneOf, isolate, pi, primes, triangle } from "../../helpers";
+import Movable from "../Movable";
+import Repository from "../Repository";
 
 export default class Ghost extends Movable {
   constructor(board, prime) {
