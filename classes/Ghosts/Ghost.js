@@ -53,17 +53,20 @@ export default class Ghost extends Movable {
       c.fillStyle = "#151515";
 
       // triangles which move due to the sinCounter
-      const tsize = this.width / 3;
+      const triangleSize = this.width / 3;
       for (let i = 0; i < 3; i++) {
         triangle(
           c,
-          -this.width + i * tsize + tsize / 2 + this.board.sinCounter(1, 8),
-          this.height / 2 - tsize / 6,
-          tsize
+          -this.width +
+            i * triangleSize +
+            triangleSize / 2 +
+            this.board.sinCounter(1, 8),
+          this.height / 2 - triangleSize / 6,
+          triangleSize
         );
       }
 
-      // eyes
+      // outer white part of eyes
       c.beginPath();
       c.fillStyle = "white";
       c.arc(-this.width / 4, 0, this.width / 8, 0, pi(2));
@@ -71,6 +74,7 @@ export default class Ghost extends Movable {
       c.fill();
       c.closePath();
 
+      // inner black part of eyes
       c.beginPath();
       c.fillStyle = "black";
       c.arc(-this.width / 4, 0, this.width / 16, 0, pi(2));

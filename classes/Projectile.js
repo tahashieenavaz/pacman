@@ -21,7 +21,7 @@ export default class Projectile extends Movable {
   draw() {
     isolate(this.context, (context) => {
       context.arc(this.x, this.y, this.size, 0, pi(2));
-      context.fillStyle = `rgba(255, 255, 255, ${this.opacity()})`;
+      context.fillStyle = `rgba(255, 255, 255, 1)`;
       context.fill();
     });
   }
