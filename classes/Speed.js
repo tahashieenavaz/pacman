@@ -7,6 +7,10 @@ export default class Speed {
     this.base = base;
   }
 
+  zero() {
+    this.set(0, 0);
+  }
+
   set(x, y) {
     this.x = x;
     this.y = y;

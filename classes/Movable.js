@@ -11,9 +11,10 @@ export default class Movable {
   }
 
   event() {
-    addEventListener("keydown", (e) => {
-      if (typeof this[`${e.key}Pressed`] === "function") {
-        this[`${e.key}Pressed`]();
+    window.addEventListener("keydown", (e) => {
+      const code = e.code;
+      if (typeof this[`${code}Pressed`] === "function") {
+        this[`${code}Pressed`]();
       }
     });
   }

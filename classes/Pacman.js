@@ -1,5 +1,6 @@
 import Movable from "./Movable";
-import { isolate, pi, distance } from "../helpers";
+import Projectile from "./Projectile";
+import { isolate, pi } from "../helpers";
 
 export default class Pacman extends Movable {
   constructor(board) {
@@ -16,21 +17,21 @@ export default class Pacman extends Movable {
   }
 
   isCollidingWithGhost(ghost) {
-    const d = distance(this.x, this.y, ghost.x, ghost.y);
-
-    isolate(this.context, (c) => {
-      c.fillStyle = "red";
-      c.arc(ghost.x - ghost.width / 2, ghost.y, 40, 0, pi(2));
-      c.fill();
-    });
-
-    console.log(d);
-
-    if (d < this.r + ghost.average) {
-      console.log("Yes");
-      return true;
-    }
     return false;
+  }
+
+  stick() {
+    this.speed.zero();
+    window.addEventListener("mousemove", (e) => {
+      this.x = e.x;
+      this.y = e.y;
+    });
+  }
+
+  // used for launching projectiles
+  SpacePressed() {
+    const projectile = new Projectile(this);
+    this.board.projectiles.push(projectile);
   }
 
   draw() {

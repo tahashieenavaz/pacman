@@ -15,6 +15,7 @@ export default class Board {
     this.element.width = innerWidth;
     this.element.height = innerHeight;
 
+    this.projectiles = [];
     this.pacman = new Pacman(this);
     this.ghosts = shuffle([
       new Ghost(this, primeNumbers[0]),
@@ -52,8 +53,17 @@ export default class Board {
       this.clean();
 
       this.ghosts.forEach((ghost) => ghost.update());
+      this.projectiles.forEach((projectile) => {
+        projectile.update();
+
+        if (projectile.opacity() <= 0) {
+          this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
+          return;
+        }
+      });
+      console.log(this.projectiles);
+
       this.pacman.update();
-      this.isColliding();
     });
   }
 }

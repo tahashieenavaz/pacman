@@ -1,4 +1,4 @@
-import { oneOf, isolate, pi, primes, triangle } from "../../helpers";
+import { isolate, pi, triangle, oneOf, primes } from "../../helpers";
 import Movable from "../Movable";
 import Repository from "../Repository";
 
@@ -18,15 +18,24 @@ export default class Ghost extends Movable {
     this.y = innerHeight / 2;
 
     this.color = "#fab234";
+    this.health = 100;
+
+    this.speed.random();
+  }
+
+  rectangle() {
+    return [
+      [this.x - this.width, this.y - this.height / 2],
+      [this.x, this.y + this.height / 2],
+    ];
   }
 
   update() {
     super.update();
-
-    // if (this.board.counter % this.prime === 0) {
-    //   this.speed.random();
-    //   this.prime = oneOf(primes());
-    // }
+    if (this.board.counter % this.prime === 0) {
+      this.speed.random();
+      this.prime = oneOf(primes());
+    }
   }
 
   draw() {
