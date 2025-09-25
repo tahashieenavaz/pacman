@@ -4,6 +4,9 @@ export default class PinkGhost extends Ghost {
   constructor(board, prime) {
     super(board);
     this.prime = prime;
-    this.color = "#eb91be";
+  }
+
+  updateColor() {
+    this.color = `rgb(235, 145, 190, ${this.opacity})`;
   }
 }

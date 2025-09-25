@@ -5,6 +5,7 @@ export default class Speed {
     this.x = 0;
     this.y = 0;
     this.base = base;
+    this.direction = "stationary";
   }
 
   zero() {
@@ -33,7 +34,11 @@ export default class Speed {
   }
 
   random() {
-    const option = oneOf(["left", "up", "down", "right"]);
-    return this[option]();
+    const directions = ["left", "up", "down", "right"];
+    const options = directions.filter((item) => item != this.direction);
+    console.log(options);
+    const direction = oneOf(options);
+    this.direction = direction;
+    return this[direction]();
   }
 }

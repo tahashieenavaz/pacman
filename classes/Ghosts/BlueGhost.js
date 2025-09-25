@@ -4,6 +4,9 @@ export default class BlueGhost extends Ghost {
   constructor(board, prime) {
     super(board);
     this.prime = prime;
-    this.color = "#57bfcc";
+  }
+
+  updateColor() {
+    this.color = `rgb(87, 191, 204, ${this.opacity})`;
   }
 }

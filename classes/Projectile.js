@@ -26,9 +26,9 @@ export default class Projectile extends Movable {
     });
   }
 
-  opacity() {
+  shouldBeRemoved() {
     const currentTime = Date.now();
     const difference = currentTime - this.shootingTime;
-    return 1 - difference / 500;
+    return difference > 1000;
   }
 }

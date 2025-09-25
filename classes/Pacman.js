@@ -1,5 +1,6 @@
 import Movable from "./Movable";
 import Projectile from "./Projectile";
+import Speed from "./Speed";
 import { isolate, pi } from "../helpers";
 
 export default class Pacman extends Movable {
@@ -12,6 +13,7 @@ export default class Pacman extends Movable {
     this.y = 100;
     this.size = 35;
     this.fraction = 10;
+    this.speed = new Speed(6);
 
     this.event();
   }

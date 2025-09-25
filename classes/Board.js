@@ -3,7 +3,7 @@ import Ghost from "./Ghosts/Ghost";
 import RedGhost from "./Ghosts/RedGhost";
 import PinkGhost from "./Ghosts/PinkGhost";
 import BlueGhost from "./Ghosts/BlueGhost";
-import { primes, shuffle } from "../helpers";
+import { primes, shuffle, oneOf } from "../helpers";
 
 export default class Board {
   constructor() {
@@ -18,10 +18,10 @@ export default class Board {
     this.projectiles = [];
     this.pacman = new Pacman(this);
     this.ghosts = shuffle([
-      new Ghost(this, primeNumbers[0]),
-      new BlueGhost(this, primeNumbers[1]),
-      new RedGhost(this, primeNumbers[2]),
-      new PinkGhost(this, primeNumbers[3]),
+      new Ghost({ board: this, prime: primeNumbers[0] }),
+      new BlueGhost({ board: this, prime: primeNumbers[1] }),
+      new RedGhost({ board: this, prime: primeNumbers[4] }),
+      new PinkGhost({ board: this, prime: primeNumbers[10] }),
     ]);
   }
 
@@ -52,17 +52,31 @@ export default class Board {
       this.loop();
       this.clean();
 
-      this.ghosts.forEach((ghost) => ghost.update());
       this.projectiles.forEach((projectile) => {
         projectile.update();
+        let projectileTjBeRemoved = false;
 
-        if (projectile.opacity() <= 0) {
+        this.ghosts.forEach((ghost) => {
+          if (ghost.isCircleCollidingWithHead(projectile)) {
+            ghost.opacity = ghost.opacity - 0.1;
+            if (ghost.opacity <= 0.5) {
+              this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
+              for (let i = 0; i < 2; i++) {
+                const size = oneOf([1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4]);
+                this.ghosts.push(ghost.clone({ board: this, size: size * 25 }));
+              }
+            }
+            projectileTjBeRemoved = true;
+          }
+        });
+
+        if (projectile.shouldBeRemoved() || projectileTjBeRemoved) {
           this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
           return;
         }
       });
-      console.log(this.projectiles);
 
+      this.ghosts.forEach((ghost) => ghost.update());
       this.pacman.update();
     });
   }
