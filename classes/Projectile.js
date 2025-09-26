@@ -7,14 +7,12 @@ export default class Projectile extends Movable {
 
     this.board = pacman.board;
     this.factor = factor;
-    this.speed.x = pacman.speed.x * this.factor;
-    this.speed.y = pacman.speed.y * this.factor;
+    this.speed.base = 10;
+    this.speed[pacman.speed.direction]();
     this.size = 5;
-
     this.x = pacman.x;
     this.y = pacman.y;
     this.shootingTime = Date.now();
-
     this.context = this.board.context;
   }
 

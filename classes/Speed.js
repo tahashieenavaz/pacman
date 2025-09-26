@@ -12,6 +12,10 @@ export default class Speed {
     this.set(0, 0);
   }
 
+  stationary() {
+    this.zero();
+  }
+
   set(x, y) {
     this.x = x;
     this.y = y;
@@ -19,18 +23,22 @@ export default class Speed {
 
   right() {
     this.set(this.base, 0);
+    this.direction = "right";
   }
 
   left() {
     this.set(-this.base, 0);
+    this.direction = "left";
   }
 
   up() {
     this.set(0, -this.base);
+    this.direction = "up";
   }
 
   down() {
     this.set(0, this.base);
+    this.direction = "down";
   }
 
   random() {
