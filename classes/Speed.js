@@ -36,7 +36,6 @@ export default class Speed {
   random() {
     const directions = ["left", "up", "down", "right"];
     const options = directions.filter((item) => item != this.direction);
-    console.log(options);
     const direction = oneOf(options);
     this.direction = direction;
     return this[direction]();

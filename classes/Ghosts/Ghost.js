@@ -1,29 +1,23 @@
-import { isolate, pi, triangle, oneOf, primes } from "../../helpers";
+import { isolate, pi, triangle, oneOf } from "../../helpers";
 import Movable from "../Movable";
-import Repository from "../Repository";
 import Speed from "../Speed";
 
 export default class Ghost extends Movable {
-  constructor({ board, prime = null, size = 3 * 25 }) {
-    const ghostCount = Repository.incrementGhost();
-    if (!prime) {
-      prime = oneOf(primes());
-    }
+  constructor({ board, size = 3 * 25 }) {
     super();
 
-    this.prime = prime;
     this.board = board;
     this.context = this.board.context;
     this.width = size;
     this.height = this.width * 1.2;
     this.average = (this.width + this.height) / 2;
-    this.x = innerWidth / 2 - this.width * 2 + this.width * ghostCount;
+    this.x = innerWidth / 2 - this.width * 2 + this.width;
     this.y = innerHeight / 2;
     this.opacity = 1;
     this.color = `rgba(250, 178, 52, ${this.opacity})`;
 
     this.speed = new Speed(oneOf([2, 3, 4, 5]));
-    this.speed.random();
+    // this.speed.random();
   }
 
   isCircleCollidingWithHead(movableCircle) {

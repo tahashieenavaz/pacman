@@ -41,3 +41,8 @@ export function oneOf(collection) {
 export function distance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
+
+export function sample(array, number) {
+  const shuffled = array.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, number);
+}

@@ -1,9 +1,8 @@
 import Ghost from "./Ghost";
 
 export default class BlueGhost extends Ghost {
-  constructor(board, prime) {
+  constructor(board) {
     super(board);
-    this.prime = prime;
   }
 
   updateColor() {

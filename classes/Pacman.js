@@ -36,6 +36,11 @@ export default class Pacman extends Movable {
     this.board.projectiles.push(projectile);
   }
 
+  EnterPressed() {
+    this.speed.x = 0;
+    this.speed.y = 0;
+  }
+
   draw() {
     const angle = pi() / this.fraction + this.board.sinCounter(0.2, 8);
 

@@ -1,14 +1,12 @@
 import Pacman from "./Pacman";
-import Ghost from "./Ghosts/Ghost";
-import RedGhost from "./Ghosts/RedGhost";
-import PinkGhost from "./Ghosts/PinkGhost";
-import BlueGhost from "./Ghosts/BlueGhost";
-import { primes, shuffle, oneOf } from "../helpers";
+import Ghost from "./ghosts/Ghost";
+import RedGhost from "./ghosts/RedGhost";
+import PinkGhost from "./ghosts/PinkGhost";
+import BlueGhost from "./ghosts/BlueGhost";
+import { sample, shuffle, oneOf } from "../helpers";
 
 export default class Board {
   constructor() {
-    const primeNumbers = primes();
-
     this.counter = 0;
     this.element = document.createElement("canvas");
     this.context = this.element.getContext("2d");
@@ -18,10 +16,10 @@ export default class Board {
     this.projectiles = [];
     this.pacman = new Pacman(this);
     this.ghosts = shuffle([
-      new Ghost({ board: this, prime: primeNumbers[0] }),
-      new BlueGhost({ board: this, prime: primeNumbers[1] }),
-      new RedGhost({ board: this, prime: primeNumbers[4] }),
-      new PinkGhost({ board: this, prime: primeNumbers[10] }),
+      // new Ghost({ board: this }),
+      new BlueGhost({ board: this }),
+      // new RedGhost({ board: this }),
+      // new PinkGhost({ board: this }),
     ]);
   }
 
@@ -61,9 +59,13 @@ export default class Board {
             ghost.opacity = ghost.opacity - 0.1;
             if (ghost.opacity <= 0.5) {
               this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
-              for (let i = 0; i < 2; i++) {
-                const size = oneOf([1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4]);
-                this.ghosts.push(ghost.clone({ board: this, size: size * 25 }));
+              if (Math.random() < 0.6) {
+                for (let i = 0; i < 2; i++) {
+                  const size = oneOf([1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4]);
+                  this.ghosts.push(
+                    ghost.clone({ board: this, size: size * 25 })
+                  );
+                }
               }
             }
             projectileTjBeRemoved = true;
@@ -77,6 +79,11 @@ export default class Board {
       });
 
       this.ghosts.forEach((ghost) => ghost.update());
+      // if (this.counter % 100 === 0) {
+      //   sample(this.ghosts, Math.ceil(this.ghosts.length / 3)).forEach(
+      //     (ghost) => ghost.speed.random()
+      //   );
+      // }
       this.pacman.update();
     });
   }
