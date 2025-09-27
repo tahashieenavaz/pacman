@@ -9,7 +9,7 @@ export default class Ghost extends Movable {
     this.board = board;
     this.context = this.board.context;
     this.width = size;
-    this.height = this.width * 1.2;
+    this.height = this.width * 0.7;
     this.average = (this.width + this.height) / 2;
     this.x = innerWidth / 2 - this.width * 2 + this.width;
     this.y = innerHeight / 2;
@@ -49,25 +49,36 @@ export default class Ghost extends Movable {
     c.fill();
   }
 
-  drawBody(c) {
-    c.fillRect(-this.width, 0, this.width, this.height - this.width / 2);
-  }
-
-  drawTail(c) {
-    // c.fillStyle = "#b5a2a2ff";
-    // triangles which move due to the sinCounter
-    const triangleSize = this.width / 3;
-    for (let i = 0; i < 3; i++) {
-      triangle(
-        c,
-        -this.width +
-          i * triangleSize +
-          triangleSize / 2 +
-          this.board.sinCounter(1, 8),
-        this.height / 2 - triangleSize / 6,
-        triangleSize
+  drawBodyLayout(c) {
+    const heights = [0.8 * this.height, this.height];
+    const triangles = 4;
+    c.beginPath();
+    c.moveTo(-this.width, 0);
+    c.lineTo(-this.width, this.height);
+    for (let i = 0; i < triangles * 2; i++) {
+      c.lineTo(
+        -this.width + ((i + 1) * this.width) / (triangles * 2),
+        heights[i % 2]
       );
     }
+    c.lineTo(0, 0);
+    c.closePath();
+  }
+
+  drawBodyEdifice(c) {
+    c.beginPath();
+    c.fillStyle = this.color;
+    c.fillRect(-this.width, 0, this.width, this.height);
+    c.closePath();
+    c.fill();
+  }
+
+  drawBody(c) {
+    c.save();
+    this.drawBodyLayout(c);
+    c.clip();
+    this.drawBodyEdifice(c);
+    c.restore();
   }
 
   drawEyes(c) {
@@ -99,7 +110,6 @@ export default class Ghost extends Movable {
 
       this.drawHead(c);
       this.drawBody(c);
-      this.drawTail(c);
       this.drawEyes(c);
     });
   }
