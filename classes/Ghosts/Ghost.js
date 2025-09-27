@@ -3,7 +3,7 @@ import Movable from "../Movable";
 import Speed from "../Speed";
 
 export default class Ghost extends Movable {
-  constructor({ board, size = 3 * 25 }) {
+  constructor({ board, size = 4 * 25 }) {
     super();
 
     this.board = board;
@@ -17,7 +17,7 @@ export default class Ghost extends Movable {
     this.color = `rgba(250, 178, 52, ${this.opacity})`;
 
     this.speed = new Speed(oneOf([2, 3, 4, 5]));
-    // this.speed.random();
+    this.speed.random();
   }
 
   isCircleCollidingWithHead(movableCircle) {
@@ -54,7 +54,7 @@ export default class Ghost extends Movable {
   }
 
   drawTail(c) {
-    c.fillStyle = "#151515";
+    // c.fillStyle = "#b5a2a2ff";
     // triangles which move due to the sinCounter
     const triangleSize = this.width / 3;
     for (let i = 0; i < 3; i++) {
@@ -105,6 +105,7 @@ export default class Ghost extends Movable {
   }
 
   clone(config) {
+    config["board"] = this.board;
     return new this.constructor(config);
   }
 }
