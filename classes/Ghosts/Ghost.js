@@ -1,9 +1,9 @@
-import { isolate, pi, triangle, oneOf, rand } from "../../helpers";
+import { isolate, pi, oneOf, rand } from "../../helpers";
 import Movable from "../Movable";
 import Speed from "../Speed";
 
 export default class Ghost extends Movable {
-  constructor({ board, size = 4 }) {
+  constructor({ board, size = 5 }) {
     super();
     this.size = size;
 

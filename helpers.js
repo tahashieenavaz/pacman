@@ -46,3 +46,10 @@ export function sample(array, number) {
   const shuffled = [...array].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, number);
 }
+
+export function redBackground() {
+  document.body.animate(
+    { backgroundColor: `rgba(100, 0, 0, 0.9)` },
+    { duration: 100 }
+  );
+}

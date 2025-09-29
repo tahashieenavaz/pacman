@@ -3,8 +3,8 @@ import Ghost from "./ghosts/Ghost";
 import RedGhost from "./ghosts/RedGhost";
 import PinkGhost from "./ghosts/PinkGhost";
 import BlueGhost from "./ghosts/BlueGhost";
-import { sample, shuffle } from "../helpers";
 import Score from "./Score";
+import { sample, shuffle, redBackground } from "../helpers";
 
 export default class Board {
   constructor() {
@@ -22,6 +22,7 @@ export default class Board {
       new RedGhost({ board: this }),
       new PinkGhost({ board: this }),
     ]);
+    this.decreased = false;
   }
 
   element() {
@@ -81,7 +82,8 @@ export default class Board {
           }
         }
       }
-      // remove projectiles from array
+
+      // remove projectiles from array in one go
       this.projectiles = this.projectiles.filter(
         (_, i) => !toBeRemovedProjectiles.has(i)
       );
@@ -94,7 +96,8 @@ export default class Board {
           this.score.increase(4);
           this.ghosts.splice(ghostIndex, 1);
         } else if (isColliding && !isGhostSmallest) {
-          this.score.decrease(ghost.size / 10);
+          this.score.decrease(ghost.size / 20);
+          redBackground();
         }
         ghost.update();
       });

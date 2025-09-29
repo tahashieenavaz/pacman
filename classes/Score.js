@@ -10,7 +10,7 @@ export default class Score {
   draw() {
     isolate(this.context, (context) => {
       context.fillStyle = "white";
-      context.font = "24px Arial";
+      context.font = "30px Arial";
       context.textAlign = "left";
       context.textBaseline = "bottom";
       context.fillText(`Score: ${parseInt(this.value)}`, 20, innerHeight - 20);
