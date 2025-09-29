@@ -50,6 +50,7 @@ export default class Ghost extends Movable {
   }
 
   drawBodyLayout(c) {
+    // the loop alternates between these two
     const heights = [0.8 * this.height, this.height];
     const triangles = 4;
     c.beginPath();
