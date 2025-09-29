@@ -68,10 +68,11 @@ export default class Board {
           const isGhostSmallest = ghost.size === 1;
           // smallest ghosts doge projectiles
           if (isCollidingWithGhost && !isGhostSmallest) {
-            ghost.opacity -= 0.05;
-            if (ghost.opacity < 0.3) {
+            ghost.opacity -= 0.1;
+            if (ghost.opacity < 0.4) {
+              const newGhostsCount = (6 - ghost.size) * 3;
               this.score.add(4 - ghost.size);
-              this.spawn(ghost, 3);
+              this.spawn(ghost, newGhostsCount);
               this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
             }
           }
