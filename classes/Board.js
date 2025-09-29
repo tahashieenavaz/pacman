@@ -22,7 +22,6 @@ export default class Board {
       new RedGhost({ board: this }),
       new PinkGhost({ board: this }),
     ]);
-    this.decreased = false;
   }
 
   element() {
@@ -96,7 +95,7 @@ export default class Board {
           this.score.increase(4);
           this.ghosts.splice(ghostIndex, 1);
         } else if (isColliding && !isGhostSmallest) {
-          this.score.decrease(ghost.size / 20);
+          this.score.decrease(ghost.size / 25);
           redBackground();
         }
         ghost.update();
