@@ -10,6 +10,7 @@ export default class Board {
   constructor() {
     this.counter = 0;
     this.projectiles = [];
+    this.createElement();
     this.score = new Score(this);
     this.pacman = new Pacman(this);
     this.ghosts = shuffle([
@@ -19,7 +20,18 @@ export default class Board {
       new PinkGhost({ board: this }),
     ]);
 
-    this.createElement();
+    this.sounds = {
+      start: new Audio("sounds/pacman_beginning.wav"),
+      chomp: new Audio("sounds/pacman_chomp.wav"),
+      eat: new Audio("sounds/pacman_eatghost.wav"),
+    };
+    for (let key in this.sounds) {
+      this.sounds[key].volume = 0.5;
+    }
+  }
+
+  play(identifier) {
+    this.sounds[identifier].play();
   }
 
   element() {
@@ -49,11 +61,13 @@ export default class Board {
     return coeff * Math.sin(this.counter / scoeff);
   }
 
-  loop() {
+  loop(once = false) {
     requestAnimationFrame(() => {
       this.counter++;
 
-      this.loop();
+      if (!once) {
+        this.loop();
+      }
       this.clean();
       this.score.update();
 
