@@ -15,8 +15,7 @@ export default class Movable {
     const headY = ghost.y;
     const dx = headX - this.x;
     const dy = headY - this.y;
-    const d = Math.hypot(dx, dy);
-    return d < this.size + ghost.width / 2;
+    return Math.hypot(dx, dy) <= this.size + ghost.width / 2;
   }
 
   isCollidingWithGhostBody(ghost) {
@@ -26,9 +25,7 @@ export default class Movable {
     const closestY = Math.max(bodyY, Math.min(this.y, bodyY + ghost.height));
     const dx = this.x - closestX;
     const dy = this.y - closestY;
-    const d = Math.hypot(dx, dy);
-
-    return d < ghost.size;
+    return Math.hypot(dx, dy) <= ghost.size;
   }
 
   isCollidingWithGhost(ghost) {

@@ -4,6 +4,7 @@ import RedGhost from "./ghosts/RedGhost";
 import PinkGhost from "./ghosts/PinkGhost";
 import BlueGhost from "./ghosts/BlueGhost";
 import { sample, shuffle } from "../helpers";
+import Score from "./Score";
 
 export default class Board {
   constructor() {
@@ -12,8 +13,8 @@ export default class Board {
     this.context = this.element.getContext("2d");
     this.element.width = innerWidth;
     this.element.height = innerHeight;
-
     this.projectiles = [];
+    this.score = new Score(this);
     this.pacman = new Pacman(this);
     this.ghosts = shuffle([
       new Ghost({ board: this }),
@@ -45,6 +46,7 @@ export default class Board {
 
       this.loop();
       this.clean();
+      this.score.update();
 
       // take care of projectiles
       const toBeRemovedProjectiles = new Set();
@@ -63,12 +65,17 @@ export default class Board {
         ) {
           const ghost = this.ghosts[ghostCounter];
           const isCollidingWithGhost = projectile.isCollidingWithGhost(ghost);
-          if (isCollidingWithGhost) {
+          const isGhostSmallest = ghost.size === 1;
+          // smallest ghosts doge projectiles
+          if (isCollidingWithGhost && !isGhostSmallest) {
             ghost.opacity -= 0.05;
             if (ghost.opacity < 0.3) {
+              this.score.add(4 - ghost.size);
+              this.spawn(ghost, 3);
               this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
             }
           }
+
           if (projectile.isExpired() || isCollidingWithGhost) {
             toBeRemovedProjectiles.add(projectileCounter);
           }
@@ -79,13 +86,16 @@ export default class Board {
         (_, i) => !toBeRemovedProjectiles.has(i)
       );
 
-      this.ghosts.forEach((ghost) => {
-        // TODO: pacman eats the smallest of ghosts
-
-        if (this.pacman.isCollidingWithGhost(ghost)) {
-          ghost.speed.zero();
+      this.ghosts.forEach((ghost, ghostIndex) => {
+        // pacman eats the smallest of ghosts
+        const isGhostSmallest = ghost.size === 1;
+        const isColliding = this.pacman.isCollidingWithGhost(ghost);
+        if (isColliding && isGhostSmallest) {
+          this.score.increase(4);
+          this.ghosts.splice(ghostIndex, 1);
+        } else if (isColliding && !isGhostSmallest) {
+          this.score.decrease(ghost.size / 10);
         }
-
         ghost.update();
       });
 
@@ -95,8 +105,30 @@ export default class Board {
           (ghost) => ghost.speed.random()
         );
       }
-
       this.pacman.update();
     });
+  }
+
+  randomGhosts(oldGhost, count) {
+    return Array(count)
+      .fill()
+      .map(() => {
+        const newSize = Math.max(1, oldGhost.size - 1);
+        const newGhost = oldGhost.clone({ size: newSize });
+        newGhost.randomLocation();
+        return newGhost;
+      });
+  }
+
+  spawn(oldGhost, count = 3) {
+    let newGhosts = this.randomGhosts(oldGhost, count);
+    while (
+      newGhosts
+        .map((ghost) => this.pacman.isCollidingWithGhost(ghost))
+        .some(Boolean)
+    ) {
+      newGhosts = this.randomGhosts(oldGhost, count);
+    }
+    this.ghosts = [...this.ghosts, ...newGhosts];
   }
 }

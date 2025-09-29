@@ -1,14 +1,15 @@
-import { isolate, pi, triangle, oneOf } from "../../helpers";
+import { isolate, pi, triangle, oneOf, rand } from "../../helpers";
 import Movable from "../Movable";
 import Speed from "../Speed";
 
 export default class Ghost extends Movable {
-  constructor({ board, size = 4 * 25 }) {
+  constructor({ board, size = 4 }) {
     super();
+    this.size = size;
 
     this.board = board;
     this.context = this.board.context;
-    this.width = size;
+    this.width = size * 25;
     this.height = this.width * 0.7;
     this.average = (this.width + this.height) / 2;
     this.x = innerWidth / 2 - this.width * 2 + this.width;
@@ -57,10 +58,14 @@ export default class Ghost extends Movable {
     c.moveTo(-this.width, 0);
     c.lineTo(-this.width, this.height);
     for (let i = 0; i < triangles * 2; i++) {
-      c.lineTo(
-        -this.width + ((i + 1) * this.width) / (triangles * 2),
-        heights[i % 2]
-      );
+      const solidLineBase =
+        -this.width + ((i + 1) * this.width) / (triangles * 2);
+      const noise = Math.sin(Date.now() / 200);
+      if (i === triangles * 2 - 1) {
+        c.lineTo(solidLineBase, heights[i % 2]);
+      } else {
+        c.lineTo(solidLineBase + noise, heights[i % 2]);
+      }
     }
     c.lineTo(0, 0);
     c.closePath();
@@ -115,8 +120,13 @@ export default class Ghost extends Movable {
     });
   }
 
-  clone(config) {
+  clone(config = {}) {
     config["board"] = this.board;
     return new this.constructor(config);
+  }
+
+  randomLocation() {
+    this.x = rand(0, window.innerWidth);
+    this.y = rand(0, window.innerHeight);
   }
 }

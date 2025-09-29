@@ -43,6 +43,6 @@ export function distance(x1, y1, x2, y2) {
 }
 
 export function sample(array, number) {
-  const shuffled = array.sort(() => Math.random() - 0.5);
+  const shuffled = [...array].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, number);
 }
