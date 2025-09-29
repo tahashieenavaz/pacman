@@ -70,14 +70,17 @@ export default class Board {
           if (isCollidingWithGhost && !isGhostSmallest) {
             ghost.opacity -= 0.1;
             if (ghost.opacity < 0.4) {
-              const newGhostsCount = (6 - ghost.size) * 3;
+              const newGhostsCount = ghost.size === 2 ? 10 : 4;
               this.score.add(4 - ghost.size);
               this.spawn(ghost, newGhostsCount);
               this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
             }
           }
 
-          if (projectile.isExpired() || isCollidingWithGhost) {
+          if (
+            (projectile.isExpired() || isCollidingWithGhost) &&
+            !isGhostSmallest
+          ) {
             toBeRemovedProjectiles.add(projectileCounter);
           }
         }
