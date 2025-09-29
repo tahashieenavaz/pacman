@@ -47,14 +47,37 @@ export default class Board {
       this.clean();
 
       // take care of projectiles
-      this.projectiles.forEach((projectile) => {
+      const toBeRemovedProjectiles = new Set();
+      for (
+        let projectileCounter = 0;
+        projectileCounter < this.projectiles.length;
+        projectileCounter++
+      ) {
+        const projectile = this.projectiles[projectileCounter];
         projectile.update();
-        let projectileRemovalFlag = false;
-        if (projectile.shouldBeRemoved() || projectileRemovalFlag) {
-          this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
-          return;
+
+        for (
+          let ghostCounter = 0;
+          ghostCounter < this.ghosts.length;
+          ghostCounter++
+        ) {
+          const ghost = this.ghosts[ghostCounter];
+          const isCollidingWithGhost = projectile.isCollidingWithGhost(ghost);
+          if (isCollidingWithGhost) {
+            ghost.opacity -= 0.05;
+            if (ghost.opacity < 0.3) {
+              this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
+            }
+          }
+          if (projectile.isExpired() || isCollidingWithGhost) {
+            toBeRemovedProjectiles.add(projectileCounter);
+          }
         }
-      });
+      }
+      // remove projectiles from array
+      this.projectiles = this.projectiles.filter(
+        (_, i) => !toBeRemovedProjectiles.has(i)
+      );
 
       this.ghosts.forEach((ghost) => {
         // TODO: pacman eats the smallest of ghosts

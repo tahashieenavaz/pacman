@@ -28,7 +28,7 @@ export default class Projectile extends Movable {
     });
   }
 
-  shouldBeRemoved() {
+  isExpired() {
     const currentTime = Date.now();
     const difference = currentTime - this.shootingTime;
     return difference > 1000;
