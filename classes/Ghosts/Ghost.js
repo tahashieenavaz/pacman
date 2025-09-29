@@ -3,7 +3,7 @@ import Movable from "../Movable";
 import Speed from "../Speed";
 
 export default class Ghost extends Movable {
-  constructor({ board, size = 4 }) {
+  constructor({ board, size = 5 }) {
     super();
     this.size = size;
 

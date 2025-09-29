@@ -93,7 +93,7 @@ export default class Board {
           if (isCollidingWithGhost && !isGhostSmallest) {
             ghost.opacity -= 0.1;
             if (ghost.opacity < 0.4) {
-              const newGhostsCount = ghost.size === 2 ? 10 : 4;
+              const newGhostsCount = ghost.size === 2 ? 5 : 2;
               this.score.add(6 - ghost.size);
               this.spawn(ghost, newGhostsCount);
               this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
@@ -122,7 +122,7 @@ export default class Board {
           this.score.increase(4);
           this.ghosts.splice(ghostIndex, 1);
         } else if (isColliding && !isGhostSmallest) {
-          this.score.decrease(ghost.size / 25);
+          this.score.decrease(ghost.size / 20);
           redBackground();
         }
         ghost.update();
