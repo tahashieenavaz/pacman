@@ -1,7 +1,7 @@
 import Movable from "./Movable";
 import Projectile from "./Projectile";
 import Speed from "./Speed";
-import { isolate, pi } from "../helpers";
+import { isolate, pi, oneOf } from "../helpers";
 
 export default class Pacman extends Movable {
   constructor(board) {
@@ -14,8 +14,13 @@ export default class Pacman extends Movable {
     this.size = 35;
     this.fraction = 10;
     this.speed = new Speed(6);
-    this.speed.random();
-
+    const initialDirection = oneOf([
+      "ArrowRightPressed",
+      "ArrowLeftPressed",
+      "ArrowUpPressed",
+      "ArrowDownPressed",
+    ]);
+    this[initialDirection]();
     this.event();
   }
 
