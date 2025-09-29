@@ -94,7 +94,7 @@ export default class Board {
             ghost.opacity -= 0.1;
             if (ghost.opacity < 0.4) {
               const newGhostsCount = ghost.size === 2 ? 10 : 4;
-              this.score.add(4 - ghost.size);
+              this.score.add(6 - ghost.size);
               this.spawn(ghost, newGhostsCount);
               this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
             }
