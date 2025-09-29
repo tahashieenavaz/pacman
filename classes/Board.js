@@ -9,10 +9,6 @@ import { sample, shuffle, redBackground } from "../helpers";
 export default class Board {
   constructor() {
     this.counter = 0;
-    this.element = document.createElement("canvas");
-    this.context = this.element.getContext("2d");
-    this.element.width = innerWidth;
-    this.element.height = innerHeight;
     this.projectiles = [];
     this.score = new Score(this);
     this.pacman = new Pacman(this);
@@ -22,14 +18,27 @@ export default class Board {
       new RedGhost({ board: this }),
       new PinkGhost({ board: this }),
     ]);
+
+    this.createElement();
   }
 
   element() {
     return this.element;
   }
 
+  createElement() {
+    this.element = document.createElement("canvas");
+    this.context = this.element.getContext("2d");
+    this.element.width = innerWidth;
+    this.element.height = innerHeight;
+  }
+
   addElement() {
     document.body.appendChild(this.element);
+  }
+
+  removeElement() {
+    document.body.removeElement(this.element);
   }
 
   clean() {
@@ -136,5 +145,9 @@ export default class Board {
       newGhosts = this.randomGhosts(oldGhost, count);
     }
     this.ghosts = [...this.ghosts, ...newGhosts];
+  }
+
+  restart() {
+    this.removeElement();
   }
 }
