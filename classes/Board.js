@@ -39,10 +39,6 @@ export default class Board {
     return coeff * Math.sin(this.counter / scoeff);
   }
 
-  isColliding() {
-    return this.ghosts.some((ghost) => this.pacman.isCollidingWithGhost(ghost));
-  }
-
   loop() {
     requestAnimationFrame(() => {
       this.counter++;
@@ -53,39 +49,24 @@ export default class Board {
       // take care of projectiles
       this.projectiles.forEach((projectile) => {
         projectile.update();
-        let projectileTjBeRemoved = false;
-
-        this.ghosts.forEach((ghost) => {
-          if (ghost.isCircleCollidingWithHead(projectile)) {
-            ghost.opacity = ghost.opacity - 0.1;
-            if (ghost.opacity <= 0.5) {
-              this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
-              for (let i = 0; i < 3; i++) {
-                const ghostSize = ghost.width / 25 - 1;
-                const newGhost = ghost.clone({ size: ghostSize * 25 });
-                this.ghosts.push(newGhost);
-              }
-            }
-            projectileTjBeRemoved = true;
-          }
-        });
-
-        if (projectile.shouldBeRemoved() || projectileTjBeRemoved) {
+        let projectileRemovalFlag = false;
+        if (projectile.shouldBeRemoved() || projectileRemovalFlag) {
           this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
           return;
         }
       });
 
       this.ghosts.forEach((ghost) => {
-        // pacman eats the smallest of ghosts
-        if (this.pacman.isCollidingWithGhost(ghost) && ghost.width == 25) {
-          this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
-          return;
+        // TODO: pacman eats the smallest of ghosts
+
+        if (this.pacman.isCollidingWithGhost(ghost)) {
+          ghost.speed.zero();
         }
+
         ghost.update();
       });
 
-      // randomize movement of 1/3 of ghosts
+      // randomize movement of 1/3 of ghosts every 100 tick
       if (this.counter % 100 === 0) {
         sample(this.ghosts, Math.ceil(this.ghosts.length / 3)).forEach(
           (ghost) => ghost.speed.random()
