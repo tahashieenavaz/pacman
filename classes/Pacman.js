@@ -14,6 +14,7 @@ export default class Pacman extends Movable {
     this.size = 35;
     this.fraction = 10;
     this.speed = new Speed(6);
+    this.speed.random();
 
     this.event();
   }
