@@ -9,7 +9,6 @@ import { sample, shuffle, redBackground } from "../helpers";
 export default class Board {
   constructor() {
     this.counter = 0;
-    this.projectiles = [];
     this.createElement();
     this.score = new Score(this);
     this.pacman = new Pacman(this);
@@ -28,10 +27,29 @@ export default class Board {
     for (let key in this.sounds) {
       this.sounds[key].volume = 0.5;
     }
+
+    this.projectiles = [];
+    this.bombs = [];
+    this.animationId = null;
+    this.isRunning = false;
   }
 
-  play(identifier) {
+  playAudio(identifier) {
     this.sounds[identifier].play();
+  }
+
+  play() {
+    if (this.isRunning) return;
+
+    this.isRunning = true;
+    this.loop();
+  }
+
+  pause() {
+    if (!this.isRunning) return;
+
+    this.isRunning = false;
+    cancelAnimationFrame(this.animationId);
   }
 
   element() {
@@ -62,80 +80,94 @@ export default class Board {
   }
 
   loop(once = false) {
-    requestAnimationFrame(() => {
+    this.animationId = requestAnimationFrame(() => {
       this.counter++;
-
       if (!once) {
         this.loop();
       }
       this.clean();
       this.score.update();
+      this.updateProjectiles();
+      this.updateGhosts();
+      this.updateBombs();
 
-      // take care of projectiles
-      const toBeRemovedProjectiles = new Set();
-      for (
-        let projectileCounter = 0;
-        projectileCounter < this.projectiles.length;
-        projectileCounter++
-      ) {
-        const projectile = this.projectiles[projectileCounter];
-        projectile.update();
-
-        for (
-          let ghostCounter = 0;
-          ghostCounter < this.ghosts.length;
-          ghostCounter++
-        ) {
-          const ghost = this.ghosts[ghostCounter];
-          const isCollidingWithGhost = projectile.isCollidingWithGhost(ghost);
-          const isGhostSmallest = ghost.size === 1;
-          // smallest ghosts doge projectiles
-          if (isCollidingWithGhost && !isGhostSmallest) {
-            ghost.opacity -= 0.1;
-            if (ghost.opacity < 0.4) {
-              const newGhostsCount = ghost.size === 2 ? 5 : 2;
-              this.score.add(6 - ghost.size);
-              this.spawn(ghost, newGhostsCount);
-              this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
-            }
-          }
-
-          if (
-            (projectile.isExpired() || isCollidingWithGhost) &&
-            !isGhostSmallest
-          ) {
-            toBeRemovedProjectiles.add(projectileCounter);
-          }
-        }
-      }
-
-      // remove projectiles from array in one go
-      this.projectiles = this.projectiles.filter(
-        (_, i) => !toBeRemovedProjectiles.has(i)
-      );
-
-      this.ghosts.forEach((ghost, ghostIndex) => {
-        // pacman eats the smallest of ghosts
-        const isGhostSmallest = ghost.size === 1;
-        const isColliding = this.pacman.isCollidingWithGhost(ghost);
-        if (isColliding && isGhostSmallest) {
-          this.score.increase(4);
-          this.ghosts.splice(ghostIndex, 1);
-        } else if (isColliding && !isGhostSmallest) {
-          this.score.decrease(ghost.size / 20);
-          redBackground();
-        }
-        ghost.update();
-      });
-
-      // randomize movement of 1/3 of ghosts every 100 tick
-      if (this.counter % 100 === 0) {
-        sample(this.ghosts, Math.ceil(this.ghosts.length / 3)).forEach(
-          (ghost) => ghost.speed.random()
-        );
-      }
+      this.randomizeGhostMovements();
       this.pacman.update();
     });
+  }
+
+  randomizeGhostMovements() {
+    // randomize movement of 1/3 of ghosts every 100 tick
+    if (this.counter % 100 === 0) {
+      sample(this.ghosts, Math.ceil(this.ghosts.length / 3)).forEach((ghost) =>
+        ghost.speed.random()
+      );
+    }
+  }
+
+  updateBombs() {
+    this.bombs.forEach((bomb) => bomb.update());
+  }
+
+  updateGhosts() {
+    this.ghosts.forEach((ghost, ghostIndex) => {
+      // pacman eats the smallest of ghosts
+      const isGhostSmallest = ghost.size === 1;
+      const isColliding = this.pacman.isCollidingWithGhost(ghost);
+      if (isColliding && isGhostSmallest) {
+        this.score.increase(4);
+        this.ghosts.splice(ghostIndex, 1);
+      } else if (isColliding && !isGhostSmallest) {
+        this.score.decrease(ghost.size / 20);
+        redBackground();
+      }
+      ghost.update();
+    });
+  }
+
+  updateProjectiles() {
+    // take care of projectiles
+    const toBeRemovedProjectiles = new Set();
+    for (
+      let projectileCounter = 0;
+      projectileCounter < this.projectiles.length;
+      projectileCounter++
+    ) {
+      const projectile = this.projectiles[projectileCounter];
+      projectile.update();
+
+      for (
+        let ghostCounter = 0;
+        ghostCounter < this.ghosts.length;
+        ghostCounter++
+      ) {
+        const ghost = this.ghosts[ghostCounter];
+        const isCollidingWithGhost = projectile.isCollidingWithGhost(ghost);
+        const isGhostSmallest = ghost.size === 1;
+        // smallest ghosts doge projectiles
+        if (isCollidingWithGhost && !isGhostSmallest) {
+          ghost.opacity -= 0.1;
+          if (ghost.opacity < 0.4) {
+            const newGhostsCount = ghost.size === 2 ? 5 : 2;
+            this.score.add(6 - ghost.size);
+            this.spawn(ghost, newGhostsCount);
+            this.ghosts.splice(this.ghosts.indexOf(ghost), 1);
+          }
+        }
+
+        if (
+          (projectile.isExpired() || isCollidingWithGhost) &&
+          !isGhostSmallest
+        ) {
+          toBeRemovedProjectiles.add(projectileCounter);
+        }
+      }
+    }
+
+    // remove projectiles from array in one go
+    this.projectiles = this.projectiles.filter(
+      (_, i) => !toBeRemovedProjectiles.has(i)
+    );
   }
 
   randomGhosts(oldGhost, count) {

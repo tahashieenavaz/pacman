@@ -1,6 +1,7 @@
 import Movable from "./Movable";
 import Projectile from "./Projectile";
 import Speed from "./Speed";
+import Bomb from "./Bomb";
 import { isolate, pi, oneOf } from "../helpers";
 
 export default class Pacman extends Movable {
@@ -39,8 +40,8 @@ export default class Pacman extends Movable {
   }
 
   EnterPressed() {
-    this.speed.x = 0;
-    this.speed.y = 0;
+    const bomb = new Bomb(this.board, this.x, this.y);
+    this.board.bombs.push(bomb);
   }
 
   draw() {

@@ -6,7 +6,7 @@ const section = document.querySelector("section");
 
 function startGame() {
   section.remove();
-  board.play("start");
+  board.playAudio("start");
   board.addElement();
 
   // render the first frame
