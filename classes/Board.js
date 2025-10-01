@@ -46,8 +46,6 @@ export default class Board {
   }
 
   pause() {
-    if (!this.isRunning) return;
-
     this.isRunning = false;
     cancelAnimationFrame(this.animationId);
   }
@@ -90,7 +88,6 @@ export default class Board {
       this.updateProjectiles();
       this.updateGhosts();
       this.updateBombs();
-
       this.randomizeGhostMovements();
       this.pacman.update();
     });
@@ -106,7 +103,11 @@ export default class Board {
   }
 
   updateBombs() {
-    this.bombs.forEach((bomb) => bomb.update());
+    this.bombs.forEach((bomb) => {
+      bomb.smallSize += 1.5;
+      bomb.bigSize += 2;
+      bomb.update();
+    });
   }
 
   updateGhosts() {
