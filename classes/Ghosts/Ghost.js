@@ -35,6 +35,10 @@ export default class Ghost extends Movable {
     ];
   }
 
+  midpoint() {
+    return [this.x - this.width / 2, this.y + this.height / 2];
+  }
+
   updateColor() {
     this.color = `rgba(250, 178, 52, ${this.opacity})`;
   }

@@ -103,11 +103,26 @@ export default class Board {
   }
 
   updateBombs() {
-    this.bombs.forEach((bomb) => {
-      bomb.smallSize += 1.5;
-      bomb.bigSize += 2;
+    for (let i = 0; i < this.bombs.length; i++) {
+      const bomb = this.bombs[i];
       bomb.update();
-    });
+
+      if (!bomb.shouldDetonate()) continue;
+
+      // the bomb detonated
+      this.bombs.splice(i, 1);
+      this.ghosts = [
+        ...this.ghosts.filter((ghost) => {
+          const [midX, midY] = ghost.midpoint();
+          const dx = midX - bomb.x;
+          const dy = midY - bomb.y;
+
+          console.log(Math.hypot(dx, dy));
+
+          return Math.hypot(dx, dy) > 200;
+        }),
+      ];
+    }
   }
 
   updateGhosts() {

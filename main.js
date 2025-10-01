@@ -13,8 +13,7 @@ function startGame() {
   board.loop(true);
 
   // start sound is 4000
-  // setTimeout(() => board.loop(), 4000);
-  board.loop();
+  setTimeout(() => board.loop(), 4000);
 
   window.removeEventListener("keydown", startGame);
 }
